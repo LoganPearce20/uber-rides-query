@@ -9,17 +9,17 @@ library(viridis)
 rm(list = ls())
 
 #read in csv files
-df_april_data <- read.csv("../uber-rides-data/uber-raw-data-apr14.csv")
+df_april_data <- read.csv("uber-rides-data/uber-raw-data-apr14.csv")
 
-df_may_data <- read.csv("../uber-rides-data/uber-raw-data-may14.csv")
+df_may_data <- read.csv("uber-rides-data/uber-raw-data-may14.csv")
 
-df_june_data <- read.csv("../uber-rides-data/uber-raw-data-jun14.csv")
+df_june_data <- read.csv("uber-rides-data/uber-raw-data-jun14.csv")
 
-df_july_data <- read.csv("../uber-rides-data/uber-raw-data-jul14.csv")
+df_july_data <- read.csv("uber-rides-data/uber-raw-data-jul14.csv")
 
-df_august_data <- read.csv("../uber-rides-data/uber-raw-data-aug14.csv")
+df_august_data <- read.csv("uber-rides-data/uber-raw-data-aug14.csv")
 
-df_september_data <- read.csv("../uber-rides-data/uber-raw-data-sep14.csv")
+df_september_data <- read.csv("uber-rides-data/uber-raw-data-sep14.csv")
 
 df_uber_data <- rbind(df_april_data, df_may_data, df_june_data, df_july_data, df_august_data, df_september_data)
 
@@ -36,7 +36,7 @@ df_rds_data[c('Date', 'Time')] <- str_split_fixed(df_rds_data$Date.Time, ' ', 2)
 df_subset[c('Date', 'Time')] <- str_split_fixed(df_subset$Date.Time, ' ', 2)
 
 #Create valid date schema for analysis
-df_rds_data <- df_subset %>% #df_rds_data %>% 
+df_rds_data <- df_rds_data %>% #df_subset %>% #
   mutate(Date.Time = as.Date(Date.Time, format = "%m/%d/%Y")) %>%
   mutate(Day = day(Date.Time)) %>%
   mutate(Week = week(Date.Time)) %>%
@@ -111,14 +111,14 @@ df_rides_by_base <- df_rds_data %>%
   mutate(ridesPerBase = length(Base))
 
 #Write rds and csv files for transfer to shiny scripts
-write_rds(df_rds_data, "../uber-rides-data/clean_data/df_formatted_rds_data.rds")
-write_csv(df_rides_by_day,"../uber-rides-data/clean_data/df_rides_by_day.csv")
-write_csv(df_rides_by_day_of_week,"../uber-rides-data/clean_data/df_rides_by_day_of_week.csv")
-write_csv(df_rides_by_base_day_of_week,"../uber-rides-data/clean_data/df_rides_by_base_day_of_week.csv")
-write_csv(df_rides_by_hour,"../uber-rides-data/clean_data/df_rides_by_hour.csv")
-write_csv(df_rides_by_base,"../uber-rides-data/clean_data/df_rides_by_base.csv")
-write_csv(df_distinct_rides_by_hour,"../uber-rides-data/clean_data/df_distinct_rides_by_hour.csv")
-write_csv(df_distinct_rides_by_day,"../uber-rides-data/clean_data/df_distinct_rides_by_day.csv")
-write_csv(df_rides_by_month,"../uber-rides-data/clean_data/df_rides_by_month.csv")
+write_rds(df_rds_data, "uber-rides-data/df_formatted_rds_data.rds")
+write_csv(df_rides_by_day,"uber-rides-data/df_rides_by_day.csv")
+write_csv(df_rides_by_day_of_week,"uber-rides-data/df_rides_by_day_of_week.csv")
+write_csv(df_rides_by_base_day_of_week,"uber-rides-data/df_rides_by_base_day_of_week.csv")
+write_csv(df_rides_by_hour,"uber-rides-data/df_rides_by_hour.csv")
+write_csv(df_rides_by_base,"uber-rides-data/df_rides_by_base.csv")
+write_csv(df_distinct_rides_by_hour,"uber-rides-data/df_distinct_rides_by_hour.csv")
+write_csv(df_distinct_rides_by_day,"uber-rides-data/df_distinct_rides_by_day.csv")
+write_csv(df_rides_by_month,"uber-rides-data/df_rides_by_month.csv")
 
 

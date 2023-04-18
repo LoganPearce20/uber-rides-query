@@ -10,14 +10,14 @@ library(DT)
 library(leaflet)
 library(viridis)
 
-df_rides_by_day <- read.csv("../uber-rides-data/clean_data/df_rides_by_day.csv")
-df_rides_by_day_of_week <- read.csv("../uber-rides-data/clean_data/df_rides_by_day_of_week.csv")
-df_rides_by_base_day_of_week <- read.csv("../uber-rides-data/clean_data/df_rides_by_base_day_of_week.csv")
-df_rides_by_month <- read.csv("../uber-rides-data/clean_data/df_rides_by_month.csv")
-df_rides_by_hour <- read.csv("../uber-rides-data/clean_data/df_rides_by_hour.csv")
-df_rides_by_base <- read.csv("../uber-rides-data/clean_data/df_rides_by_base.csv")
-df_distinct_rides_by_hour <- read.csv("../uber-rides-data/clean_data/df_distinct_rides_by_hour.csv")
-df_distinct_rides_by_day <- read.csv("../uber-rides-data/clean_data/df_distinct_rides_by_day.csv")
+df_rides_by_day <- read.csv("uber-rides-data/df_rides_by_day.csv")
+df_rides_by_day_of_week <- read.csv("uber-rides-data/df_rides_by_day_of_week.csv")
+df_rides_by_base_day_of_week <- read.csv("uber-rides-data/df_rides_by_base_day_of_week.csv")
+df_rides_by_month <- read.csv("uber-rides-data/df_rides_by_month.csv")
+df_rides_by_hour <- read.csv("uber-rides-data/df_rides_by_hour.csv")
+df_rides_by_base <- read.csv("uber-rides-data/df_rides_by_base.csv")
+df_distinct_rides_by_hour <- read.csv("uber-rides-data/df_distinct_rides_by_hour.csv")
+df_distinct_rides_by_day <- read.csv("uber-rides-data/df_distinct_rides_by_day.csv")
 
 # Define UI for application that draws a histogram
 column_names<-colnames(df_uber_data) #for input selections
