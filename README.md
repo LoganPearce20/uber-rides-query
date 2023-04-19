@@ -2,8 +2,8 @@
 ## Introduction
 This is a shiny application that allows users to explore the relationships between the time of day, day of the week, month, and location and the frequency of times an uber ride occurs in New York
 
+## ShinyApp URL
 A working version of this app has been published and hosted through Shinyapps.io, and is accessible via the link below.
-
 https://loganpearce20.shinyapps.io/uber-rides/
 
 ## R script Directory
