@@ -113,7 +113,9 @@ write_csv(df_rides_by_hour,"uber-rides-data/df_rides_by_hour.csv")
 write_csv(df_rides_by_base,"uber-rides-data/df_rides_by_base.csv")
 write_csv(df_distinct_rides_by_hour,"uber-rides-data/df_distinct_rides_by_hour.csv")
 write_csv(df_distinct_rides_by_day,"uber-rides-data/df_distinct_rides_by_day.csv")
+write_csv(df_distinct_hour_and_month,"uber-rides-data/df_distinct_hour_and_month.csv")
 write_csv(df_rides_by_month,"uber-rides-data/df_rides_by_month.csv")
+write_csv(df_prediction, "uber-rides-data/df_prediction.csv")
 ```
 # Creation of UI
 * Setting the theme for the shinyApp
@@ -134,20 +136,33 @@ selectizeInput("Day",
  ```
  * Create tabs for greater organization of graphs
  ```r
- tabsetPanel(
+tabsetPanel(
             tabPanel("Rides Per Day & Month", htmlOutput("comment1"),plotOutput("trips_by_day"), htmlOutput("comment2"), plotOutput("trips_by_month")),
             tabPanel("Rides Per Hour & Month", htmlOutput("comment3"),plotOutput("trips_by_hour"), htmlOutput("comment4"),plotOutput("trips_by_hour2"),DTOutput("rides_per_hour")),
-            tabPanel("Rides Per Day of the Month", plotOutput("trips_by_distinct_day"),htmlOutput("comment5"),plotOutput("trips_by_distinct_day_month"),htmlOutput("comment6"), DTOutput("rides_per_day")),
+            tabPanel("Rides Per Day of the Month", htmlOutput("comment5"), plotOutput("trips_by_distinct_day"),htmlOutput("comment6"),plotOutput("trips_by_distinct_day_month"), DTOutput("rides_per_day")),
             tabPanel("Rides Per Base by Month & Day", htmlOutput("comment7"),plotOutput("trips_by_base_day"), htmlOutput("comment8"),plotOutput("trips_by_base_month")),
             tabPanel("Geospatial Leaflet", htmlOutput("comment15"),leafletOutput("uber_map")),
-            tabPanel("Heatmaps", htmlOutput("comment9"),plotOutput("heat_hour_day"), htmlOutput("comment10"),plotOutput("heat_month_day"), htmlOutput("comment11"),plotOutput("heat_month_week"), htmlOutput("comment12"), plotOutput("heat_bases_day")),
+            tabPanel("Heatmaps", htmlOutput("comment10"),plotOutput("heat_month_day"), htmlOutput("comment11"),plotOutput("heat_month_week"), htmlOutput("comment12"), plotOutput("heat_bases_day"),htmlOutput("comment9"),plotOutput("heat_hour_day"),),
             tabPanel("Prediction Model", htmlOutput("comment13"),plotOutput("prediction_model1"), htmlOutput("comment14"),plotOutput("prediction_model2"), DTOutput("residuals")),
 ```
 ## Creation of Server
+* Read in .csv files 
+```r
+df_rides_by_day <- read.csv("uber-rides-data/df_rides_by_day.csv")
+df_rides_by_day_of_week <- read.csv("uber-rides-data/df_rides_by_day_of_week.csv")
+df_rides_by_base_day_of_week <- read.csv("uber-rides-data/df_rides_by_base_day_of_week.csv")
+df_rides_by_month <- read.csv("uber-rides-data/df_rides_by_month.csv")
+df_rides_by_hour <- read.csv("uber-rides-data/df_rides_by_hour.csv")
+df_rides_by_base <- read.csv("uber-rides-data/df_rides_by_base.csv")
+df_distinct_rides_by_hour <- read.csv("uber-rides-data/df_distinct_rides_by_hour.csv")
+df_distinct_rides_by_day <- read.csv("uber-rides-data/df_distinct_rides_by_day.csv")
+df_distinct_hour_and_month <- read.csv("uber-rides-data/df_distinct_hour_and_month.csv")
+df_prediction <-read.csv("uber-rides-data/df_prediction.csv")
+```
 * Set Plot theme
 ```r
-plot_theme <- ggdark::dark_theme_gray(base_family = "Fira Sans Condensed Light", base_size = 14) + 
-  theme(plot.title = element_text(family = "Fira Sans Condensed"),
+plot_theme <- ggdark::dark_theme_gray(base_size = 14) + 
+  theme(plot.title = element_text(),
         plot.background = element_rect(fill = "grey10"),
         panel.background = element_blank(),
         panel.grid.major = element_line(color = "grey30", size = 0.2),
@@ -290,7 +305,7 @@ df_prediction_model <- lm(ridesPerHour ~ Hour + Day + Month + Base, data = df_ri
 * Creating Bar chart to show the residuals of the model
 ```r
 output$prediction_model1 <- renderPlot({
-  ggplot(data=df_rides_by_hour, aes(df_prediction_model$residuals)) +
+  ggplot(data=df_prediction, aes(df_prediction_model$residuals)) +
     geom_histogram(binwidth = 1, color = "blue", fill = "purple4") +
     theme(panel.background = element_rect(fill = "white"),
           axis.line.x=element_line(),
@@ -303,13 +318,15 @@ output$prediction_model1 <- renderPlot({
 ```r
 output$prediction_model2 <- renderPlot({
   ggplot(data = df_rides_by_hour, aes(x = Hour, y = ridesPerHour)) +
-    geom_point() +
     geom_smooth() +
     stat_smooth(method = "lm", col = "dodgerblue3") +
     theme(panel.background = element_rect(fill = "white"),
           axis.line.x=element_line(),
           axis.line.y=element_line()) +
     ggtitle("Linear Model Fitted to Data") +
+    scale_x_discrete(name = "Time of Day",
+                     limits = c("12 am", "1 am", "2 am", "3 am", "4 am", "5 am", "6 am", "7 am", "8 am", "9 am", "10 am"
+                                , "11 am", "12 pm", "1 pm", "2 pm", "3 pm", "4 pm", "5 pm", "6 pm", "7 pm", "8 pm", "9 pm"
+                                , "10 pm", "11 pm", "12 pm")) +
     plot_theme
-})
 ```
